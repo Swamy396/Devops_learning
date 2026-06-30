@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
+env/
+
+# SQLite DB (use volume in Docker)
+*.db
+*.sqlite3
+
+# Environment / secrets
+.env
+*.env
+
+# Dev tooling
+.git/
+.gitignore
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+
+# Docs / editor
+*.md
+.vscode/
+.idea/
