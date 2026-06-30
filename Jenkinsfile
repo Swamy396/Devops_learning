@@ -2,25 +2,18 @@ pipeline {
     agent any
 
     stages {
-
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
 
-        stage('Verify Docker') {
+        stage('Verify') {
             steps {
-                sh 'docker --version'
+                sh 'pwd'
+                sh 'ls -la'
             }
         }
-
-        stage('Build Docker Image') {
-            steps {
-                sh 'docker build -t todo-api:latest .'
-            }
-        }
-
     }
 
     post {
