@@ -33,4 +33,5 @@ app.include_router(todos.router, prefix="/api/v1")
 
 @app.get("/health", tags=["health"])
 def health_check():
+    print("Hello")
     return {"status": "ok"}
