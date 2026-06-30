@@ -1,0 +1,14 @@
+name: FastAPI CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print Message
+        run: echo "Pipeline Started Successfully"
