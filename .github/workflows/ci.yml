@@ -28,3 +28,40 @@ jobs:
         working-directory: todo-api
         run: |
           python -c "from app.main import app"
+      
+  lint:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Dependencies
+        working-directory: todo-api
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install flake8
+
+      - name: Run Linter
+        working-directory: todo-api
+        run: |
+          flake8 .
+  dockerize:
+    needs: lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker Image
+        working-directory: todo-api
+        run: |
+          docker build -t todo-api .
