@@ -49,11 +49,25 @@ jobs:
           pip install -r requirements.txt
           pip install pylint
 
-      - name: Run Linter
-        continue-on-error: true
+      - name: Run Linter (warnings, not failures)
         working-directory: todo-api
         run: |
-          pylint app
+          # Run pylint, output in a parse-friendly format
+          pylint app --output-format=parseable --exit-zero > pylint_report.txt || true
+          cat pylint_report.txt
+
+          # Convert each pylint finding into a GitHub Actions ::warning:: annotation
+          while IFS= read -r line; do
+            if [[ "$line" =~ ^([^:]+):([0-9]+):([0-9]+):[[:space:]](.*)$ ]]; then
+              file="${BASH_REMATCH[1]}"
+              lineno="${BASH_REMATCH[2]}"
+              msg="${BASH_REMATCH[4]}"
+              echo "::warning file=todo-api/${file},line=${lineno}::${msg}"
+            fi
+          done < pylint_report.txt
+
+          # Always exit 0 so the job/check stays green (success)
+          exit 0
   dockerize:
     needs: lint
     runs-on: ubuntu-latest
