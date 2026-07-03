@@ -52,21 +52,19 @@ jobs:
       - name: Run Linter (warnings, not failures)
         working-directory: todo-api
         run: |
-          # Run pylint, output in a parse-friendly format
           pylint app --output-format=parseable --exit-zero > pylint_report.txt || true
           cat pylint_report.txt
 
-          # Convert each pylint finding into a GitHub Actions ::warning:: annotation
+          # pylint parseable format: file:line: [code] message  (no column number)
           while IFS= read -r line; do
-            if [[ "$line" =~ ^([^:]+):([0-9]+):([0-9]+):[[:space:]](.*)$ ]]; then
+            if [[ "$line" =~ ^([^:]+):([0-9]+):[[:space:]](.*)$ ]]; then
               file="${BASH_REMATCH[1]}"
               lineno="${BASH_REMATCH[2]}"
-              msg="${BASH_REMATCH[4]}"
+              msg="${BASH_REMATCH[3]}"
               echo "::warning file=todo-api/${file},line=${lineno}::${msg}"
             fi
           done < pylint_report.txt
 
-          # Always exit 0 so the job/check stays green (success)
           exit 0
   dockerize:
     needs: lint
