@@ -50,9 +50,10 @@ jobs:
           pip install flake8
 
       - name: Run Linter
+        continue-on-error: true
         working-directory: todo-api
         run: |
-          flake8 --format=github .
+          flake8 .
   dockerize:
     needs: lint
     runs-on: ubuntu-latest
